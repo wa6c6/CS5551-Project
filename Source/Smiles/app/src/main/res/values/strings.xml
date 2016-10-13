@@ -13,4 +13,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="access_fine_location_rationale">"Location permissions are needed to find a provider near you."</string>
+    <string name="title_activity_provider_search">Provider Search</string>
 </resources>
