@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "95365455827",
+    "firebase_url": "https://smiles-519e3.firebaseio.com",
+    "project_id": "smiles-519e3",
+    "storage_bucket": "smiles-519e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95365455827:android:0dd8731793303529",
+        "android_client_info": {
+          "package_name": "cs5551.smiles"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "95365455827-28lempttjp2pgr031t80969mkd4a4ee6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9jGGZRxnZnda17L6gsDlR5sWgzm5YOsA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

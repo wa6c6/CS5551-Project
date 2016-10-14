@@ -372,6 +372,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+
+
+    }
+    public void reg(View v){
+        Intent nav = new Intent(getApplicationContext(), RegisterActivity.class);
+        startActivity(nav);
     }
 }
 
