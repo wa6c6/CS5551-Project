@@ -1,0 +1,49 @@
+<!-- Menu file for `activity_movies.xml` is located in a file
+     such as `res/menu/menu_movies.xml`  -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/miCompose"
+
+        app:showAsAction="ifRoom"
+        android:title="Compose">
+    </item>
+    <item
+        android:id="@+id/miProfile"
+
+        app:showAsAction="ifRoom|withText"
+        android:title="Profile">
+    </item>
+    <item
+        android:id="@+id/menu_ordinary"
+        android:orderInCategory="200"
+        app:showAsAction="ifRoom"
+        android:title="Ordinary" />
+    <item
+        android:id="@+id/menu_important"
+        android:orderInCategory="20"
+        app:showAsAction="ifRoom"
+        android:title="Important" />
+
+
+    <!-- "Mark Favorite", should appear as action button if possible-->
+
+    <item
+        android:id="@+id/action_favorite"
+
+        android:title="@string/action_favorite"
+        app:showAsAction="ifRoom"/>
+
+    <!--Settings, should always be in the overflow-->
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
+
+
+</menu>
+
+<!--    android:icon="@drawable/ic_compose"
+   android:icon="@drawable/ic_profile"
+    android:icon="@drawable/ic_favorite_black_48dp"-->
+
+

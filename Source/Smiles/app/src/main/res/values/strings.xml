@@ -16,4 +16,14 @@
     <string name="access_fine_location_rationale">"Location permissions are needed to find a provider near you."</string>
     <string name="title_activity_provider_search">Provider Search</string>
     <string name="title_activity_register">RegisterActivity</string>
+
+    <string name="properties_circle">Properties for Circle(s)</string>
+    <string name="fill_hue">Fill Hue</string>
+    <string name="fill_alpha">Fill Alpha</string>
+    <string name="stroke_width">Stroke Width</string>
+    <string name="clickable">Clickable</string>
+    <string name="action_favorite">Favorite</string>
+    <string name="action_settings">Settings</string>
+
+
 </resources>
