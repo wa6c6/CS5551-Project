@@ -13,57 +13,257 @@
     tools:context="cs5551.smiles.RegisterActivity"
     tools:showIn="@layout/activity_register">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="67dp"
-        android:id="@+id/editText"
-        android:hint="Name" />
+    <ScrollView
+        android:id="@+id/registration_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:text="Register:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="19dp"
-        android:id="@+id/textView"
-        android:textAppearance="@style/TextAppearance.CastMiniController.Title" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:layout_below="@+id/editText2"
-        android:layout_alignEnd="@+id/editText2"
-        android:layout_marginTop="18dp"
-        android:id="@+id/editText3"
-        android:hint="Password" />
+            <!-- Login Information -->
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:layout_marginTop="23dp"
-        android:id="@+id/editText2"
-        android:hint="Email"
-        android:layout_below="@+id/editText"
-        android:layout_alignStart="@+id/editText" />
+            <TextView
+                android:id="@+id/login_info"
+                android:text="Login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.CastMiniController.Title" />
 
-    <Button
-        android:text="Submitt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
-        android:id="@+id/button2"
-        style="@android:style/Widget.Material.Button.Colored"
-        android:layout_below="@+id/editText3"
-        android:layout_centerHorizontal="true"
-        android:visibility="visible" />
+            <EditText
+                android:id="@+id/email_input"
+                android:hint="email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/password_input"
+                android:hint="password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+            <!-- User Information -->
+
+            <TextView
+                android:id="@+id/user_info"
+                android:text="User"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.CastMiniController.Title" />
+
+            <EditText
+                android:id="@+id/firstname_input"
+                android:hint="first name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/lastname_input"
+                android:hint="last name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/age_input"
+                android:hint="age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+            <CheckBox
+                android:id="@+id/male_input"
+                android:text="Male"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/female_input"
+                android:text="Female"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/address_input"
+                android:hint="address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPostalAddress" />
+
+            <EditText
+                android:id="@+id/city_input"
+                android:hint="city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/state_input"
+                android:hint="state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/zip_input"
+                android:hint="zip code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+            <!-- Insurance Information -->
+
+            <TextView
+                android:id="@+id/insurance_info"
+                android:text="Insurance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.CastMiniController.Title" />
+
+            <EditText
+                android:id="@+id/plan_number_input"
+                android:hint="plan number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/provider_input"
+                android:hint="provider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+            <CheckBox
+                android:id="@+id/financing_input"
+                android:text="Interested in Financing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Medical/Dential History -->
+
+            <TextView
+                android:id="@+id/med_dent_history_info"
+                android:text="Medical/Dental History"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.CastMiniController.Title" />
+
+            <CheckBox
+                android:id="@+id/previous_ortho_treatment_input"
+                android:text="Any history of previouse orthodontic treatment?"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/cavities_input"
+                android:text="Any know cavaties?"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/curr_dentist_input"
+                android:text="current dentist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.CastMiniController.Title" />
+
+            <EditText
+                android:id="@+id/last_dent_cleaning_input"
+                android:hint="date of last dental cleaning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date" />
+
+            <EditText
+                android:id="@+id/med_conditions_input"
+                android:hint="Any know medical conditions or diseases?"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+            <!-- Primay Complaints -->
+
+            <TextView
+                android:id="@+id/complaints_info"
+                android:text="Primay Complaints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.CastMiniController.Title" />
+
+            <EditText
+                android:id="@+id/smile_change_input"
+                android:hint="What would you like to change about your smile?"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/teeth_change_input"
+                android:hint="What would you like to change about your teeth?"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/profile_change_input"
+                android:hint="What if anything would you like to change about your face or profile?"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+            <!-- Desired Treatment -->
+
+            <TextView
+                android:id="@+id/treatment_info"
+                android:text="Desired Treatment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.CastMiniController.Title" />
+
+            <CheckBox
+                android:id="@+id/braces_input"
+                android:text="Braces"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/invisalign_input"
+                android:text="Invisalign"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/lbraces_input"
+                android:text="Lingual Braces"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/other_treatment_input"
+                android:hint="other"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+        </LinearLayout>
+
+        <!--<Button-->
+        <!--android:text="Submitt"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="29dp"-->
+        <!--android:id="@+id/button2"-->
+        <!--style="@android:style/Widget.Material.Button.Colored"-->
+        <!--android:layout_below="@+id/editText3"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:visibility="visible" />-->
+
+    </ScrollView>
+
 </RelativeLayout>

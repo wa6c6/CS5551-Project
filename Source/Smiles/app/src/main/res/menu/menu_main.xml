@@ -2,42 +2,55 @@
      such as `res/menu/menu_movies.xml`  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/miCompose"
+    <!--<item-->
+        <!--android:id="@+id/miCompose"-->
 
-        app:showAsAction="ifRoom"
-        android:title="Compose">
-    </item>
-    <item
-        android:id="@+id/miProfile"
+        <!--app:showAsAction="ifRoom"-->
+        <!--android:title="Compose">-->
+    <!--</item>-->
+    <!--<item-->
+        <!--android:id="@+id/miProfile"-->
 
-        app:showAsAction="ifRoom|withText"
-        android:title="Profile">
-    </item>
-    <item
-        android:id="@+id/menu_ordinary"
-        android:orderInCategory="200"
-        app:showAsAction="ifRoom"
-        android:title="Ordinary" />
-    <item
-        android:id="@+id/menu_important"
-        android:orderInCategory="20"
-        app:showAsAction="ifRoom"
-        android:title="Important" />
+        <!--app:showAsAction="ifRoom|withText"-->
+        <!--android:title="Profile">-->
+    <!--</item>-->
+    <!--<item-->
+        <!--android:id="@+id/menu_ordinary"-->
+        <!--android:orderInCategory="200"-->
+        <!--app:showAsAction="ifRoom"-->
+        <!--android:title="Ordinary" />-->
+    <!--<item-->
+        <!--android:id="@+id/menu_important"-->
+        <!--android:orderInCategory="20"-->
+        <!--app:showAsAction="ifRoom"-->
+        <!--android:title="Important" />-->
 
 
     <!-- "Mark Favorite", should appear as action button if possible-->
 
-    <item
-        android:id="@+id/action_favorite"
+    <!--<item-->
+        <!--android:id="@+id/action_favorite"-->
 
-        android:title="@string/action_favorite"
-        app:showAsAction="ifRoom"/>
+        <!--android:title="@string/action_favorite"-->
+        <!--app:showAsAction="ifRoom"/>-->
+
+    <item android:id="@+id/action_provider_search"
+        android:title="Provider Search"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_pics"
+        android:title="Pics"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_profile"
+        android:title="Profile"
+        app:showAsAction="never"/>
+
 
     <!--Settings, should always be in the overflow-->
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
+    <!--<item android:id="@+id/action_settings"-->
+        <!--android:title="@string/action_settings"-->
+        <!--app:showAsAction="never"/>-->
 
 
 </menu>

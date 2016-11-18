@@ -30,6 +30,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -211,9 +215,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
-
-            // WAYNE: Call to bring up maps
-            startActivity(new Intent(getApplicationContext(), ProviderSearchActivity.class));
         }
     }
 
@@ -344,13 +345,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
+                // TODO: hit db for username & pwd
+
                 if (pieces[0].equals(mEmail)) {
+                    // WAYNE: Call to bring up maps
+                    startActivity(new Intent(getApplicationContext(), ProviderSearchActivity.class));
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
             }
 
             // TODO: register the new account here.
+            // WAYNE: Register new account
+            startActivity( new Intent(getApplicationContext(), MinimalRegisterActivity.class) );
+
             return true;
         }
 
@@ -374,10 +382,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
 
-    }
-    public void reg(View v){
-        Intent nav = new Intent(getApplicationContext(), RegisterActivity.class);
-        startActivity(nav);
     }
 }
 
