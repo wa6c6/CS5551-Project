@@ -90,6 +90,14 @@
                 app:srcCompat="@drawable/smiley_face_with_braces"
                 android:id="@+id/photoView"
                 android:layout_weight="1.91"/>
+            <TextView
+                android:text="User template."
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/button2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="24dp"
+                android:id="@+id/textView2" />
 
         </LinearLayout>
     </ScrollView>

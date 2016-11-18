@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="editText4" type="id">editText4</item>
+    <item name="editText5" type="id">editText5</item>
+    <item name="editText6" type="id">editText6</item>
+    <item name="editText7" type="id">editText7</item>
+    <item name="editText8" type="id">editText8</item>
+    <item name="editText9" type="id">editText9</item>
+    <item name="editText10" type="id">editText10</item>
+    <item name="editText11" type="id">editText11</item>
+    <item name="editText12" type="id">editText12</item>
+    <item name="editText13" type="id">editText13</item>
+    <item name="editText14" type="id">editText14</item>
+    <item name="textView3" type="id">textView3</item>
+    <item name="editText15" type="id">editText15</item>
+    <item name="editText16" type="id">editText16</item>
+    <item name="editText17" type="id">editText17</item>
+    <item name="editText18" type="id">editText18</item>
+    <item name="editText19" type="id">editText19</item>
+    <item name="textView4" type="id">textView4</item>
+    <item name="editText20" type="id">editText20</item>
+    <item name="editText21" type="id">editText21</item>
+    <item name="editText22" type="id">editText22</item>
+    <item name="textView5" type="id">textView5</item>
+    <item name="checkBox" type="id">checkBox</item>
+    <item name="checkBox1" type="id">checkBox1</item>
+    <item name="checkBox2" type="id">checkBox2</item>
+</resources>
