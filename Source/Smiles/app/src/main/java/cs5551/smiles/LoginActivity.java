@@ -37,10 +37,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.Manifest.permission.INTERNET;
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
 /**
@@ -55,7 +57,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int PERMISSION_ALL = 1;
 
     // WAYNE
-    private static final String[] PERMISSIONS = {READ_CONTACTS, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, CAMERA};
+    private static final String[] PERMISSIONS = {READ_CONTACTS, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, CAMERA,
+                                                 INTERNET, WRITE_EXTERNAL_STORAGE};
 
     /**
      * A dummy authentication store containing known user names and passwords.

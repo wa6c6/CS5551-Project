@@ -7,8 +7,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +20,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
+
+import cs5551.smiles.places.GooglePlacesReadTask;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -101,25 +101,25 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
         }
 
         LatLng userCurrentLocationCorodinates = null;
-        double latitute = 0, longitude = 0;
+        double latitude = 0, longitude = 0;
 
         //Getting the current location of the user.
         userCurrentLocation.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                 0, 0, userCurrentLocationListener);
-        latitute = userCurrentLocation
+        latitude = userCurrentLocation
                 .getLastKnownLocation(LocationManager.GPS_PROVIDER)
                 .getLatitude();
         longitude = userCurrentLocation
                 .getLastKnownLocation(LocationManager.GPS_PROVIDER)
                 .getLongitude();
-        userCurrentLocationCorodinates = new LatLng(latitute,longitude);
+        userCurrentLocationCorodinates = new LatLng(latitude,longitude);
 
         // used in the map marker
         StringBuilder userAddress = new StringBuilder();
 
         // Set current
         try {
-            List<Address> addresses = geocoder.getFromLocation(latitute, longitude, 1);
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             Address address = addresses.get(0);
             userAddress =  new StringBuilder();
             for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
@@ -139,6 +139,30 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
 
         // Move camera and zoom level of the map.
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocationCorodinates, 15));
+
+        // WAYNE
+        String type = "Orthodontics";
+        // Places Search
+//        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+//        googlePlacesUrl.append("location=" + latitude + "," + longitude);
+//        googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
+//        googlePlacesUrl.append("&radius=" + 5000);
+//        googlePlacesUrl.append("&types=" + type);
+//        googlePlacesUrl.append("&sensor=true");
+//        googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
+//        googlePlacesUrl.append("&key=" + "AIzaSyCGeqWbwxzG6zHv2Nxgg3w4RJKisDepayo");
+        // Text Search
+        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?");
+        googlePlacesUrl.append("query=" + type);
+        googlePlacesUrl.append("&location=" + latitude + "," + longitude);
+        googlePlacesUrl.append("&radius=" + 5000);
+        googlePlacesUrl.append("&key=" + "AIzaSyCGeqWbwxzG6zHv2Nxgg3w4RJKisDepayo");
+
+        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
+        Object[] toPass = new Object[2];
+        toPass[0] = mMap;
+        toPass[1] = googlePlacesUrl.toString();
+        googlePlacesReadTask.execute(toPass);
     }
 
     @Override
