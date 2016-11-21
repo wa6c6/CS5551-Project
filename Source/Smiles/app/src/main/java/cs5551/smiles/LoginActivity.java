@@ -74,6 +74,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +107,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        tv = (TextView) findViewById(R.id.textView2);
+
+        tv.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nav = new Intent(LoginActivity.this,MinimalRegisterActivity.class);
+                startActivity(nav);
+            }
+        });
     }
 
     private void requestPermissions() {
@@ -382,6 +392,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
 
+    }
+    public void reg(View v){
+        Intent nav = new Intent(getApplicationContext(), RegisterActivity.class);
+        startActivity(nav);
     }
 }
 
