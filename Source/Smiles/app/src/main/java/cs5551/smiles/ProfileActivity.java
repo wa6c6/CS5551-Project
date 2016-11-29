@@ -95,8 +95,10 @@ public class ProfileActivity extends AppCompatActivity {
                     if(child.getKey().equals(LoginActivity.getUSER().getEmail().replace(".",""))) {
                         user = child.getValue(User.class);
 
+                        // login
                         email.setText(user.getEmail());
                         password.setText(user.getPassword());
+                        // user
                         firstName.setText(user.getFirstName());
                         lastName.setText(user.getLastName());
                         age.setText(user.getAge());
@@ -112,6 +114,24 @@ public class ProfileActivity extends AppCompatActivity {
                             male.setChecked(false);
                             female.setChecked(true);
                         }
+                        // insurance
+                        insuranceProvider.setText(user.getInsuranceProvider());
+                        planNumber.setText(user.getPlanNumber());
+                        financing.setChecked(user.getFinancing());
+                        // history
+                        dentalProvider.setText(user.getDentalProvider());
+                        lastCleaning.setText(user.getLastCleaning());
+                        medicalConditions.setText(user.getMedicalConditions());
+                        historyOfOrthoTreatment.setChecked(user.getHistoryOfOrthoTreatment());
+                        anyKnownCavaties.setChecked(user.getAnyKnownCavaties());
+                        // complaints
+                        changeSmile.setText(user.getChangeSmile());
+                        changeProfile.setText(user.getChangeProfile());
+                        changeTeeth.setText(user.getChangeTeeth());
+                        // treatment
+                        braces.setChecked(user.getBraces());
+                        lingualBraces.setChecked(user.getLingualBraces());
+                        invisalign.setChecked(user.getInvisalign());
                     }
                 }
             }
@@ -127,8 +147,10 @@ public class ProfileActivity extends AppCompatActivity {
 
                 // set any updated fields
                 user = new User();
+                // login
                 user.setEmail(email.getText().toString());
                 user.setPassword(password.getText().toString());
+                // user
                 user.setFirstName(firstName.getText().toString());
                 user.setLastName(lastName.getText().toString());
                 user.setAge(age.getText().toString());
@@ -136,7 +158,6 @@ public class ProfileActivity extends AppCompatActivity {
                 user.setCity(city.getText().toString());
                 user.setState(state.getText().toString());
                 user.setZipCode(zipCode.getText().toString());
-
                 if(((RadioButton) findViewById(gender.getCheckedRadioButtonId())).getId() == R.id.male){
                     user.setMale(true);
                     user.setFemale(false);
@@ -145,6 +166,24 @@ public class ProfileActivity extends AppCompatActivity {
                     user.setMale(false);
                     user.setFemale(true);
                 }
+                // insurance
+                user.setInsuranceProvider(insuranceProvider.getText().toString());
+                user.setPlanNumber(planNumber.getText().toString());
+                user.setFinancing(financing.isChecked());
+                // history
+                user.setDentalProvider(dentalProvider.getText().toString());
+                user.setLastCleaning(lastCleaning.getText().toString());
+                user.setMedicalConditions(medicalConditions.getText().toString());
+                user.setHistoryOfOrthoTreatment(historyOfOrthoTreatment.isChecked());
+                user.setAnyKnownCavaties(anyKnownCavaties.isChecked());
+                // complaints
+                user.setChangeProfile(changeProfile.getText().toString());
+                user.setChangeSmile(changeSmile.getText().toString());
+                user.setChangeTeeth(changeTeeth.getText().toString());
+                // treatment
+                user.setBraces(braces.isChecked());
+                user.setLingualBraces(lingualBraces.isChecked());
+                user.setInvisalign(invisalign.isChecked());
 
                 // update/save to db
                 usersRef.child(user.getEmail().replace(".","")).setValue(user);
