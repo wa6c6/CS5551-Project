@@ -6,9 +6,10 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
+
+import java.util.concurrent.Semaphore;
 
 import android.content.CursorLoader;
 import android.content.Loader;
@@ -30,9 +31,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,9 +67,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+//    private static final String[] DUMMY_CREDENTIALS = new String[]{
+//            "foo@example.com:hello", "bar@example.com:world"
+//    };
+    // Initialize DB
+    private final DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users_2");
+
+    // Hack
+    private static User USER = null;
+
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -115,7 +125,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         tv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent nav = new Intent(LoginActivity.this,MinimalRegisterActivity.class);
+                Intent nav = new Intent(LoginActivity.this,ProfileActivity.class);
                 startActivity(nav);
             }
         });
@@ -233,7 +243,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return email.contains("@") && email.contains(".");
     }
 
     private boolean isPasswordValid(String password) {
@@ -337,42 +347,85 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
-        private final String mPassword;
+        private final String email;
+        private final String password;
 
         UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
+            this.email = email;
+            this.password = password;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+//            try {
+//                // Simulate network access.
+//                Thread.sleep(2000);
+//            } catch (InterruptedException e) {
+//                return false;
+//            }
+//
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                // TODO: hit db for username & pwd
+//
+//                if (pieces[0].equals(email)) {
+//                    // Set user
+//                    USER = email;
+//
+//                    // WAYNE: Call to bring up maps
+//                    startActivity(new Intent(getApplicationContext(), ProviderSearchActivity.class));
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
+//
+//            // TODO: register the new account here.
+//            // WAYNE: Register new account
+//            startActivity( new Intent(getApplicationContext(), ProfileActivity.class) );
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                // TODO: hit db for username & pwd
+            // sync hack
+            final Semaphore semaphore = new Semaphore(0);
 
-                if (pieces[0].equals(mEmail)) {
-                    // WAYNE: Call to bring up maps
-                    startActivity(new Intent(getApplicationContext(), ProviderSearchActivity.class));
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+            //
+            usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // find user
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        // match on key (ex. foo@examplecom)
+                        if(child.getKey().equals(email.replace(".","")) ) {
+                            USER = child.getValue(User.class);
+//                            if(USER.getPassword().equals(password)){
+//                                USER = null;
+                            if(USER.getPassword().equals(password)){
+//                                startActivity(new Intent(getApplicationContext(), ProviderSearchActivity.class));
+                            }
+                            else {
+                                USER = null;
+                            }
+                            break;
+                        }
+                    }
+                    semaphore.release();
                 }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("In onCancelled");
+                }
+            });
+
+            try {
+                semaphore.acquire();
+            }
+            catch (InterruptedException e) {
+                System.out.println("Semaphore Exception:" + e.getStackTrace());
             }
 
-            // TODO: register the new account here.
-            // WAYNE: Register new account
-            startActivity( new Intent(getApplicationContext(), MinimalRegisterActivity.class) );
-
-            return true;
+            return USER != null;
+//            return true;
         }
 
         @Override
@@ -382,8 +435,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 finish();
+                startActivity(new Intent(getApplicationContext(), ProviderSearchActivity.class));
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.setError("This email/password is incorrect.");
                 mPasswordView.requestFocus();
             }
         }
@@ -396,9 +450,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
     }
-    public void reg(View v){
-        Intent nav = new Intent(getApplicationContext(), RegisterActivity.class);
+
+    public void register(View v){
+        // take them to set up their profile
+        Intent nav = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(nav);
+    }
+
+    public static User getUSER(){
+        return USER;
     }
 }
 

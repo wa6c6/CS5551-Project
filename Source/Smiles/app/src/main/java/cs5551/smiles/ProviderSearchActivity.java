@@ -1,6 +1,7 @@
 package cs5551.smiles;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,7 +39,7 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_provider_search);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.providerSearchToolbar);
         setSupportActionBar(toolbar);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -169,7 +171,28 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.provider_search_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_pics:
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+
+            case R.id.action_profile:
+                // direct them to profile
+                startActivity( new Intent(getApplicationContext(), ProfileActivity.class) );
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 }
