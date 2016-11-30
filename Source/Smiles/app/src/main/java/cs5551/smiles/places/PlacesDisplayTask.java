@@ -1,9 +1,12 @@
 package cs5551.smiles.places;
 
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -12,6 +15,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 
+import cs5551.smiles.R;
 import cs5551.smiles.places.Places;
 
 
@@ -39,7 +43,7 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
 
     @Override
     protected void onPostExecute(List<HashMap<String, String>> list) {
-        googleMap.clear();
+//        googleMap.clear();
 //        for (int i = 0; i < list.size(); i++) {
 //            MarkerOptions markerOptions = new MarkerOptions();
 //            HashMap<String, String> googlePlace = list.get(i);
@@ -61,6 +65,8 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);
             markerOptions.title(googlePlace.get("place_name"));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.smiley_face_with_braces_pin));
+
             googleMap.addMarker(markerOptions);
         }
     }

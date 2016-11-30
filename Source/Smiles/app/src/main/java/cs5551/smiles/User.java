@@ -244,4 +244,45 @@ public class User {
         this.invisalign = invisalign;
     }
 
+    @Override
+    public String toString(){
+        final StringBuilder sb = new StringBuilder();
+
+        // user
+        sb.append("Personal Information --------------").append(System.lineSeparator())
+          .append("First Name: ").append(firstName).append(System.lineSeparator())
+          .append("Last Name: ").append(lastName).append(System.lineSeparator())
+          .append("Age: ").append(age).append(System.lineSeparator())
+          .append("Gender: ").append(male?"Male":"female").append(System.lineSeparator())
+          .append("Address: ").append(address).append(System.lineSeparator())
+          .append("                 ").append(city).append(",").append(state).append(zipCode).append(System.lineSeparator())
+          .append(System.lineSeparator())
+          // insurance
+          .append("Insurance Information -------------").append(System.lineSeparator())
+          .append("Insurance Provider: ").append(insuranceProvider).append(System.lineSeparator())
+          .append("Plan Number: ").append(planNumber).append(System.lineSeparator())
+          .append("Financing? ").append(financing?"Yes":"No").append(System.lineSeparator())
+          .append(System.lineSeparator())
+          // history
+          .append("Medical History -------------------").append(System.lineSeparator())
+          .append("Dental Provider: ").append(dentalProvider).append(System.lineSeparator())
+          .append("Last Cleaning: ").append(lastCleaning).append(System.lineSeparator())
+          .append("Medical Conditions: ").append(medicalConditions).append(System.lineSeparator())
+          .append("History Of Orthodontic Treatment? ").append(historyOfOrthoTreatment?"Yes":"No").append(System.lineSeparator())
+          .append("Any known Cavities? ").append(anyKnownCavaties?"Yes":"No").append(System.lineSeparator())
+          .append(System.lineSeparator())
+          // complaints
+          .append("Primary Complaints ----------------").append(System.lineSeparator())
+          .append("What you would like to change about your smile. ").append(changeSmile).append(System.lineSeparator())
+          .append("What you would like to change about your teeth. ").append(changeTeeth).append(System.lineSeparator())
+          .append("What you would like to change about your profile. ").append(changeProfile).append(System.lineSeparator())
+          .append(System.lineSeparator())
+          // treatment
+          .append("Desired Treatment -----------------").append(System.lineSeparator())
+          .append("Braces? ").append(braces?"Yes":"No").append(System.lineSeparator())
+          .append("Lingual Braces? ").append(lingualBraces?"Yes":"No").append(System.lineSeparator())
+          .append("Invisalign? ").append(invisalign?"Yes":"No").append(System.lineSeparator());
+
+        return sb.toString();
+    }
 }
