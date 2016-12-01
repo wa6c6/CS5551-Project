@@ -4,11 +4,20 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 
 
 public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
     String googlePlacesData = null;
     GoogleMap googleMap;
+
+    final LatLng currLoc;
+    final int radius;
+
+    public  GooglePlacesReadTask(LatLng currLoc, int radius){
+        this.currLoc = currLoc;
+        this.radius = radius;
+    }
 
     @Override
     protected String doInBackground(Object... inputObj) {
@@ -25,7 +34,7 @@ public class GooglePlacesReadTask extends AsyncTask<Object, Integer, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        PlacesDisplayTask placesDisplayTask = new PlacesDisplayTask();
+        PlacesDisplayTask placesDisplayTask = new PlacesDisplayTask(currLoc, radius);
         Object[] toPass = new Object[2];
         toPass[0] = googleMap;
         toPass[1] = result;

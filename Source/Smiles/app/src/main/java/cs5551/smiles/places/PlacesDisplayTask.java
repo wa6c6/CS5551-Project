@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
+import com.google.maps.android.SphericalUtil;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -20,10 +22,16 @@ import cs5551.smiles.places.Places;
 
 
 public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<String, String>>> {
-
-
     JSONObject googlePlacesJson;
     GoogleMap googleMap;
+
+    final LatLng currLoc;
+    final int radius;
+
+    public PlacesDisplayTask(LatLng currLoc, int radius){
+        this.currLoc = currLoc;
+        this.radius = radius;
+    }
 
     @Override
     protected List<HashMap<String, String>> doInBackground(Object... inputObj) {
@@ -59,8 +67,18 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
         for (int i = 0; i < list.size(); i++) {
             HashMap<String, String> googlePlace = list.get(i);
 
+            // location of clinic
             LatLng latLng = new LatLng(Double.parseDouble(googlePlace.get("lat")),
                                        Double.parseDouble(googlePlace.get("lng")));
+
+            // if its not within the radius then skip
+            Double distance = SphericalUtil.computeDistanceBetween(latLng, currLoc);
+            if (distance.intValue() > radius) {
+                System.out.println(googlePlace.get("place_name") + " is " +distance + " > " + radius);
+                continue;
+            }
+
+            System.out.println(googlePlace.get("place_name") + " is " + distance + " < " + radius);
 
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);

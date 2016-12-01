@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_pics"
-        android:title="Pics"
-        app:showAsAction="never"/>
-
     <item android:id="@+id/action_profile"
         android:title="Profile"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/set_radius"
+        android:title="Radius (5mi)"
         app:showAsAction="never"/>
 
 </menu>

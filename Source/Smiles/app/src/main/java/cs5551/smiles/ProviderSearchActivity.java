@@ -1,5 +1,6 @@
 package cs5551.smiles;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,6 +48,11 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
 
     private final DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users_2");
 
+    // in meters
+    private int radius = 8100;        // approx meters in 5 miles
+    private int metersInMile = 1609; // approx meters in 1 mile
+    private String[] radiiArray;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +60,11 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.providerSearchToolbar);
         setSupportActionBar(toolbar);
+
+        radiiArray = getResources().getStringArray(R.array.radii);
+
+        // Initialize
+        geocoder = new Geocoder(getApplicationContext());
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -65,8 +76,7 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * This is where we can add markers or lines, add listeners or move the camera.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -75,13 +85,8 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // wayne here?
+        // here?
         mMap.clear();
-
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         // Setup
         LocationManager userCurrentLocation = (LocationManager) this
@@ -89,22 +94,18 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
         LocationListener userCurrentLocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-
             }
 
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
-
             }
 
             @Override
             public void onProviderEnabled(String provider) {
-
             }
 
             @Override
             public void onProviderDisabled(String provider) {
-
             }
         };
 
@@ -174,10 +175,11 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
         StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?");
         googlePlacesUrl.append("query=" + type);
         googlePlacesUrl.append("&location=" + latitude + "," + longitude);
-        googlePlacesUrl.append("&radius=" + 5000);
+        System.out.println("radius = " + radius);
+        googlePlacesUrl.append("&radius=" + radius);
         googlePlacesUrl.append("&key=" + "AIzaSyCGeqWbwxzG6zHv2Nxgg3w4RJKisDepayo");
 
-        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
+        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask(userCurrentLocationCorodinates, radius);
         Object[] toPass = new Object[2];
         toPass[0] = mMap;
         toPass[1] = googlePlacesUrl.toString();
@@ -188,11 +190,12 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
             @Override public boolean onMarkerClick(final Marker marker) {
                 System.out.println("Clicked on a marker.");
 
-                //?
+                // ? - i think this allows the pin tag to still show up after touching
                 marker.showInfoWindow();
 
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ProviderSearchActivity.this);
                 dialogBuilder.setTitle("Email " + marker.getTitle() + "?")
+                        // need to call some other google services to get ratings info, email, and even pics of clinic.
                         .setMessage("** Additional Provider Info **")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
@@ -275,8 +278,37 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_pics:
-                // User chose the "Settings" item, show the app settings UI...
+            case R.id.set_radius:
+                // prompt for new radius
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ProviderSearchActivity.this);
+                dialogBuilder.setTitle("Pick a Radius")
+                             .setItems(R.array.radii, new DialogInterface.OnClickListener() {
+                                 public void onClick(DialogInterface dialog, int which) {
+                                     // The 'which' argument contains the index position
+                                     // of the selected item
+                                     radius = new Integer(radiiArray[which]) * metersInMile;
+                                     onMapReady(mMap);
+                                 }
+                             });
+//                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog,int id) {
+//                                    // refresh map with new radius
+//                                    radius = 500;
+//                                    onMapReady(mMap);
+//                                 }
+//                            })
+//                             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog,int id) {
+//                                    System.out.println("Clicked on 'No'");
+//                                    // nothing to do
+//                                 }
+//                            });
+                // Create dialogue
+                AlertDialog alertDialog = dialogBuilder.create();
+                alertDialog.show();
+
                 return true;
 
             case R.id.action_profile:
