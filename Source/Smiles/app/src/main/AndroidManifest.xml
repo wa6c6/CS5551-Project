@@ -3,7 +3,6 @@
     package="cs5551.smiles">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -11,12 +10,15 @@
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the 'MyLocation' functionality. 
+         location permissions for the 'MyLocation' functionality.
     -->
+<<<<<<< HEAD
     <!-- <<<<<<< HEAD -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- ======= -->
     <!-- >>>>>>> bcbaf42e552cf73f4f27281248b84f9a27f554f4 -->
+=======
+>>>>>>> 58b3679e9fca628a809b1732b917c25b56fced2f
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -80,11 +82,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".ProfileActivity"
             android:label="Profile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MinimalRegisterActivity"
+            android:name=".RegisterActivity"
             android:label="Profile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_minimal_register"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="cs5551.smiles.ProfileActivity"
+    tools:showIn="@layout/activity_profile">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- LOGIN -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Login"
+                    android:id="@+id/login_group"
+                    android:textAppearance="@style/TextAppearance.CastMiniController.Title"/>
+
+            </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/my_border">
+
+                <EditText
+                    android:id="@+id/email_input"
+                    android:hint="email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/login_group"
+                    android:inputType="textEmailAddress"
+                    />
+                <EditText
+                    android:id="@+id/password_input"
+                    android:hint="password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/login_group"
+                    android:inputType="textPassword"
+                    />
+            </LinearLayout>
+
+            <!-- USER -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="User"
+                    android:id="@+id/user_group"
+                    android:textAppearance="@style/TextAppearance.CastMiniController.Title"/>
+
+            </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/my_border">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="first name"
+                    android:layout_below="@id/user_group"
+                    android:inputType="text"
+                    android:id="@+id/first_name"
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="last name"
+                    android:layout_below="@id/user_group"
+                    android:inputType="text"
+                    android:id="@+id/last_name"
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="age"
+                    android:layout_below="@id/user_group"
+                    android:inputType="number"
+                    android:id="@+id/age"
+                    />
+                <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/gender">
+                    <RadioButton android:id="@+id/male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="male"
+                        android:onClick="onRadioButtonClicked"/>
+                    <RadioButton android:id="@+id/female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="female"
+                        android:onClick="onRadioButtonClicked"/>
+                </RadioGroup>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="address"
+                    android:layout_below="@id/user_group"
+                    android:inputType="text"
+                    android:id="@+id/address"
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="city"
+                    android:layout_below="@id/user_group"
+                    android:inputType="text"
+                    android:id="@+id/city"
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="state"
+                    android:layout_below="@id/user_group"
+                    android:inputType="text"
+                    android:id="@+id/state"
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="zip code"
+                    android:layout_below="@id/user_group"
+                    android:inputType="number"
+                    android:id="@+id/zip_code"
+                    />
+
+            </LinearLayout>
+
+            <!-- Insurance -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Insurance"
+                    android:id="@+id/insurance_group"
+                    android:textAppearance="@style/TextAppearance.CastMiniController.Title" />
+
+            </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/my_border">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="provider"
+                    android:layout_below="@id/insurance_group"
+                    android:inputType="text"
+                    android:id="@+id/insurance_provider"
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="plan number"
+                    android:layout_below="@id/insurance_group"
+                    android:inputType="text"
+                    android:id="@+id/plan_number"
+                    />
+                <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/insurance_group"
+                    android:id="@+id/financing"
+                    android:text="Interested in third party financing?"/>
+                <!--<EditText-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="15dp"-->
+                    <!--android:hint="HIPPA disclaimer link?"-->
+                    <!--android:layout_below="@id/insurance_group"-->
+                    <!--android:layout_marginLeft="50dp"-->
+                    <!--android:layout_marginRight="50dp"-->
+                    <!--android:inputType="text"-->
+                    <!--android:id="@+id/editText13"-->
+                    <!--/>-->
+            </LinearLayout>
+
+            <!-- History -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Medical/Dental History"
+                    android:id="@+id/history_group"
+                    android:textAppearance="@style/TextAppearance.CastMiniController.Title" />
+            </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/my_border">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Current dentist?"
+                    android:layout_below="@id/history_group"
+                    android:inputType="text"
+                    android:id="@+id/dental_provider"
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="last dental cleaning"
+                    android:layout_below="@id/history_group"
+                    android:inputType="date"
+                    android:id="@+id/last_cleaning"
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Any known medical conditions or diseases?"
+                    android:layout_below="@id/history_group"
+                    android:inputType="text"
+                    android:id="@+id/medical_conditions"
+                    />
+                <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/history_group"
+                    android:id="@+id/history_of_orth_treatment"
+                    android:text="Any history of orthodontic treatment?"/>
+                <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/history_group"
+                    android:id="@+id/any_known_cavaties"
+                    android:text="Any known cavaties?"/>
+
+            </LinearLayout>
+
+            <!-- Primary Complaint -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Primary Complaint"
+                    android:id="@+id/complaint_group"
+                    android:textAppearance="@style/TextAppearance.CastMiniController.Title" />
+            </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/my_border">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="What would you like to change about your smile?"
+                    android:layout_below="@id/complaint_group"
+                    android:inputType="text"
+                    android:id="@+id/change_smile"
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="What would you like to change about your teeth?"
+                    android:layout_below="@id/complaint_group"
+                    android:inputType="text"
+                    android:id="@+id/change_teeth"
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="What would you like to change about your face or profile?"
+                    android:layout_below="@id/complaint_group"
+                    android:inputType="text"
+                    android:id="@+id/change_profile"
+                    />
+            </LinearLayout>
+
+            <!-- Treatment -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Desired Treatment"
+                    android:id="@+id/treatment_group"
+                    android:textAppearance="@style/TextAppearance.CastMiniController.Title" />
+            </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/my_border">
+
+                <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/treatment_group"
+                    android:id="@+id/braces"
+                    android:text="braces"/>
+
+                <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/treatment_group"
+                    android:id="@+id/invisalign"
+                    android:text="Invisaling"/>
+                <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/treatment_group"
+                    android:text="Lingual Braces"
+                    android:id="@+id/lingual_braces"
+                    />
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/submitBtn"
+                android:onClick="submit"
+                android:text="Submit"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
