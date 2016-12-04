@@ -228,11 +228,12 @@ public class ProfileActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_pics:
                 // User chose the "Settings" item, show the app settings UI...
+                startActivity(new Intent(getApplicationContext(),PhotoDisplayActivity.class));
                 return true;
 
             case R.id.action_provider_search:
                 // direct them to profile
-                startActivity( new Intent(getApplicationContext(), ProviderSearchActivity.class) );
+                startActivity( new Intent(getApplicationContext(), ProviderSearchActivity.class));
                 return true;
 
             default:

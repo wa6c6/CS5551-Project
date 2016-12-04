@@ -6,24 +6,17 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -33,9 +26,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Set;
 
-public class DataDisplayActivity extends AppCompatActivity {
+public class PhotoDisplayActivity extends AppCompatActivity {
 
     private ImageView imgv;
     private Button pic;
@@ -59,7 +51,7 @@ public class DataDisplayActivity extends AppCompatActivity {
         //if (savedInstanceState != null) {
             //path = Uri.parse(savedInstanceState.getString("media_url"));
         //}
-        setContentView(R.layout.activity_data_display);
+        setContentView(R.layout.activity_photo_display);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -119,11 +111,11 @@ public class DataDisplayActivity extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                         progess.dismiss();
-                        Toast.makeText(DataDisplayActivity.this,"Uploaded successfully",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PhotoDisplayActivity.this,"Uploaded successfully",Toast.LENGTH_SHORT).show();
 
                         Uri getImage = taskSnapshot.getDownloadUrl();
-                        Picasso.with(DataDisplayActivity.this).load(getImage).resize(500,500).centerCrop().into(imgv);
-                        Toast.makeText(DataDisplayActivity.this,"Getting image..",Toast.LENGTH_SHORT).show();
+                        Picasso.with(PhotoDisplayActivity.this).load(getImage).resize(750,750).into(imgv);
+                        Toast.makeText(PhotoDisplayActivity.this,"Getting image..",Toast.LENGTH_SHORT).show();
 
 
                     }
@@ -133,7 +125,7 @@ public class DataDisplayActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
 
                         progess.dismiss();
-                        Toast.makeText(DataDisplayActivity.this,"Uploaded failed",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PhotoDisplayActivity.this,"Uploaded failed",Toast.LENGTH_SHORT).show();
                     }
                 });
 

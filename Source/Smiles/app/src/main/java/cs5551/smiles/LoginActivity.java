@@ -120,23 +120,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        tv = (TextView) findViewById(R.id.textView2);
-        tv2 = (TextView) findViewById(R.id.textView3);
 
-        tv.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent nav = new Intent(LoginActivity.this,ProfileActivity.class);
-                startActivity(nav);
-            }
-        });
-        tv2.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent nav2 = new Intent(LoginActivity.this,DataDisplayActivity.class);
-                startActivity(nav2);
-            }
-        });
+
+
     }
 
     private void requestPermissions() {

@@ -1,6 +1,5 @@
 package cs5551.smiles;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,7 +32,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 import cs5551.smiles.places.GooglePlacesReadTask;
 
@@ -270,7 +268,7 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         getMenuInflater().inflate(R.menu.provider_search_menu, menu);
         return true;
     }
