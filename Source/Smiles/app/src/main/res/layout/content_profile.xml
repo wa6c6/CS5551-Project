@@ -44,23 +44,36 @@
                 android:orientation="vertical"
                 android:background="@drawable/my_border">
 
-                <EditText
-                    android:id="@+id/email_input"
-                    android:hint="email"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/login_group"
-                    android:inputType="textEmailAddress"
-                    />
-                <EditText
-                    android:id="@+id/password_input"
-                    android:hint="password"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/email_input"
+                        android:hint="email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/login_group"
+                        android:inputType="textEmailAddress"
+                        />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/login_group"
-                    android:inputType="textPassword"
-                    />
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/password_input"
+                        android:hint="password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/login_group"
+                        android:inputType="textPassword"
+                        />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
+
 
             <!-- USER -->
             <android.support.design.widget.TextInputLayout
@@ -153,8 +166,8 @@
                     android:inputType="number"
                     android:id="@+id/zip_code"
                     />
-
             </LinearLayout>
+
 
             <!-- Insurance -->
             <android.support.design.widget.TextInputLayout
@@ -209,6 +222,7 @@
                     <!--/>-->
             </LinearLayout>
 
+
             <!-- History -->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -261,8 +275,8 @@
                     android:layout_below="@id/history_group"
                     android:id="@+id/any_known_cavaties"
                     android:text="Any known cavaties?"/>
-
             </LinearLayout>
+
 
             <!-- Primary Complaint -->
             <android.support.design.widget.TextInputLayout
@@ -306,6 +320,7 @@
                     android:id="@+id/change_profile"
                     />
             </LinearLayout>
+
 
             <!-- Treatment -->
             <android.support.design.widget.TextInputLayout
@@ -354,6 +369,7 @@
                 android:text="Submit"/>
 
         </LinearLayout>
+
     </ScrollView>
 
 </RelativeLayout>

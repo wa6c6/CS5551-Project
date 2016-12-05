@@ -36,7 +36,8 @@ import java.util.UUID;
 public class PhotoDisplayActivity extends AppCompatActivity {
 
     private ImageView imgv;
-    private Button pic;
+//    private Button pic;
+    private ImageView pic;
 
     // File Storage
     private final StorageReference usersPhotosStorageRef = FirebaseStorage.getInstance().getReference("users_photos_2");
@@ -71,17 +72,23 @@ public class PhotoDisplayActivity extends AppCompatActivity {
 //        usersPhotosStorageRef = FirebaseStorage.getInstance().getReference();
         progess = new ProgressDialog(this);
         imgv = (ImageView) findViewById(R.id.imageView);
-        pic =  (Button) findViewById(R.id.capture);
-
-       pic.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-             Intent nav = new  Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-             startActivityForResult(nav, CAMERA_REQUEST_CODE);
-
-           }
-       });
-
+//        pic =  (Button) findViewById(R.id.capture);
+//
+//        pic.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent nav = new  Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(nav, CAMERA_REQUEST_CODE);
+//            }
+//        });
+        pic = (ImageView) findViewById(R.id.photoView);
+        pic.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent nav = new  Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(nav, CAMERA_REQUEST_CODE);
+            }
+        });
     }
 
     @Override
@@ -114,16 +121,19 @@ public class PhotoDisplayActivity extends AppCompatActivity {
                 storePic.putFile(uriPath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
                         progess.dismiss();
-                        Toast.makeText(PhotoDisplayActivity.this,"Uploaded successfully",Toast.LENGTH_SHORT).show();
 
                         Uri getImage = taskSnapshot.getDownloadUrl();
                         Picasso.with(PhotoDisplayActivity.this).load(getImage).resize(750,750).into(imgv);
 //                        Toast.makeText(PhotoDisplayActivity.this,"Getting image..",Toast.LENGTH_SHORT).show();
 
+                        // Set to visible
+                        imgv.setVisibility(View.VISIBLE);
+
                         // write path to realtime db
                         usersPhotosDBRef.child(LoginActivity.getUSER().getEmail().replace(".","")).child(uuid).setValue(getImage.toString());
+
+                        Toast.makeText(PhotoDisplayActivity.this,"Uploaded successfully",Toast.LENGTH_SHORT).show();
                     }
 
                 }).addOnFailureListener(new OnFailureListener() {

@@ -442,7 +442,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
 
-
     }
 
     public void register(View v){
@@ -454,9 +453,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public static User getUSER(){
         return USER;
     }
+
     public static void setUSER(User user){
         USER = user;
     }
-
 }
 

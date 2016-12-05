@@ -1,7 +1,9 @@
 package cs5551.smiles;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -162,7 +164,13 @@ public class ProfileActivity extends AppCompatActivity {
                 user.setCity(city.getText().toString());
                 user.setState(state.getText().toString());
                 user.setZipCode(zipCode.getText().toString());
-                if(((RadioButton) findViewById(gender.getCheckedRadioButtonId())).getId() == R.id.male){
+                RadioButton rbtn = ((RadioButton) findViewById(gender.getCheckedRadioButtonId()));
+//                if(((RadioButton) findViewById(gender.getCheckedRadioButtonId())).getId() == R.id.male){
+                if(rbtn == null){
+                    user.setMale(false);
+                    user.setFemale(false);
+                }
+                else if (rbtn.getId() == R.id.male) {
                     user.setMale(true);
                     user.setFemale(false);
                 }
@@ -189,15 +197,42 @@ public class ProfileActivity extends AppCompatActivity {
                 user.setLingualBraces(lingualBraces.isChecked());
                 user.setInvisalign(invisalign.isChecked());
 
-                // update/save to db
-                usersDBRef.child(user.getEmail().replace(".","")).setValue(user);
-
-                // Its a new user so set on login, becaue its used other places.
-                if(newUser) {
-                    LoginActivity.setUSER(user);
+                if(user.getEmail().isEmpty() ||
+                   user.getPassword().isEmpty() ||
+                   user.getFirstName().isEmpty() ||
+                   user.getLastName().isEmpty() ){
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ProfileActivity.this);
+                    dialogBuilder.setTitle("Missing Requied fields")
+                            .setMessage("Email, Password, First and Last Name are Required.")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog,int id) {
+                                    // refresh map with new radius
+                                }
+                            });
+//                             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog,int id) {
+//                                    System.out.println("Clicked on 'No'");
+//                                    // nothing to do
+//                                 }
+//                            });
+                    // Create dialogue
+                    AlertDialog alertDialog = dialogBuilder.create();
+                    alertDialog.show();
                 }
+                else {
+                    // update/save to db
+                    usersDBRef.child(user.getEmail().replace(".", "")).setValue(user);
 
-                Toast.makeText(ProfileActivity.this,"Profile Saved.",Toast.LENGTH_SHORT).show();
+                    // Its a new user so set on login, because its used other places.
+                    if (newUser) {
+                        LoginActivity.setUSER(user);
+                        startActivity(new Intent(getApplicationContext(), PhotoDisplayActivity.class));
+                    } else {
+                        Toast.makeText(ProfileActivity.this, "Profile Saved.", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
     }
@@ -234,6 +269,10 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Need to have registered.
+        if(LoginActivity.getUSER() == null)
+            return false;
+
         switch (item.getItemId()) {
             case R.id.action_pics:
                 // User chose the "Settings" item, show the app settings UI...

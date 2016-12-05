@@ -80,15 +80,14 @@
                 android:onClick="register"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:padding="10dip"
-                app:srcCompat="@drawable/smiley_face_with_braces"
-                android:id="@+id/photoView"
-                android:layout_weight="1.91"/>
-
+            <!--<ImageView-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="60dp"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:padding="10dip"-->
+                <!--app:srcCompat="@drawable/smiley_face_with_braces"-->
+                <!--android:id="@+id/photoView"-->
+                <!--android:layout_weight="1.91"/>-->
 
         </LinearLayout>
     </ScrollView>

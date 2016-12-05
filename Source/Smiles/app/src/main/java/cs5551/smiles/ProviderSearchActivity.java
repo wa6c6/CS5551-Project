@@ -164,7 +164,7 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
 
         // WAYNE
         String type = "Orthodontics";
-        // Places Search
+        // Google Places Search
 //        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
 //        googlePlacesUrl.append("location=" + latitude + "," + longitude);
 //        googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
@@ -173,19 +173,19 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
 //        googlePlacesUrl.append("&sensor=true");
 //        googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
 //        googlePlacesUrl.append("&key=" + "AIzaSyCGeqWbwxzG6zHv2Nxgg3w4RJKisDepayo");
-        // Text Search
 
-        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?");
-        googlePlacesUrl.append("query=" + type);
-        googlePlacesUrl.append("&location=" + latitude + "," + longitude);
+        // Google Text Search
+        StringBuilder googleTextSearchUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?");
+        googleTextSearchUrl.append("query=" + type);
+        googleTextSearchUrl.append("&location=" + latitude + "," + longitude);
         System.out.println("radius = " + radius);
-        googlePlacesUrl.append("&radius=" + radius);
-        googlePlacesUrl.append("&key=" + "AIzaSyCGeqWbwxzG6zHv2Nxgg3w4RJKisDepayo");
+        googleTextSearchUrl.append("&radius=" + radius);
+        googleTextSearchUrl.append("&key=" + "AIzaSyCGeqWbwxzG6zHv2Nxgg3w4RJKisDepayo");
 
         GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask(userCurrentLocationCorodinates, radius);
         Object[] toPass = new Object[2];
         toPass[0] = mMap;
-        toPass[1] = googlePlacesUrl.toString();
+        toPass[1] = googleTextSearchUrl.toString();
         googlePlacesReadTask.execute(toPass);
 
         //
@@ -224,8 +224,8 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
                                                             // match on key (ex. foo@examplecom)
                                                             if(child.getKey().equals(LoginActivity.getUSER().getEmail().replace(".","")) ) {
                                                                 for(DataSnapshot child2 : child.getChildren()) {
-                                                                    // get all values
-                                                                imagePaths.add(child2.getValue().toString());
+                                                                    // 2. get all image paths
+                                                                    imagePaths.add(child2.getValue().toString());
                                                                 }
                                                             }
                                                         }
@@ -278,8 +278,21 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
             sb.append(path).append(System.lineSeparator());
         }
 //        Log.i("Send email", "");
-        String[] TO = {"waulner@gmail.com"};
-        String[] CC = {""};
+//        String[] TO = {"waulner@gmail.com"};
+//        String[] CC = {""};
+        ArrayList<String> to = new ArrayList<>();
+
+        // load with "to" addresses.
+        if(LoginActivity.getUSER().getEmail().contains("@example.com")) {
+            to.add("waulner@gmail.com");
+        }
+        else {
+            to.add(LoginActivity.getUSER().getEmail());
+        }
+
+        // Will need to convert "to" ArryaList to array
+        String [] arr = new String[to.size()];
+
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
 //        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
 
@@ -287,7 +300,8 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
         // This to prompts email client only
         emailIntent.setType("message/rfc822");
 //        emailIntent.setType("text/html");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, to.toArray(arr));
+//        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
 //        emailIntent.putExtra(Intent.EXTRA_CC, CC);
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Orthodontic Template From - " + LoginActivity.getUSER().getFirstName() + " " + LoginActivity.getUSER().getLastName() );
         emailIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
@@ -317,6 +331,7 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
                 // prompt for new radius
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ProviderSearchActivity.this);
                 dialogBuilder.setTitle("Pick a Radius")
+
                              .setItems(R.array.radii, new DialogInterface.OnClickListener() {
                                  public void onClick(DialogInterface dialog, int which) {
                                      // The 'which' argument contains the index position
