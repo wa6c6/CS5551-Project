@@ -8,10 +8,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +19,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -26,14 +31,21 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.UUID;
 
 public class PhotoDisplayActivity extends AppCompatActivity {
 
     private ImageView imgv;
     private Button pic;
 
+    // File Storage
+    private final StorageReference usersPhotosStorageRef = FirebaseStorage.getInstance().getReference("users_photos_2");
+    // Mirror File Storage becasue there is no way to perform a dir/ls in Firebase Storage
+    // (see https://groups.google.com/forum/#!topic/firebase-talk/ZUy3hHWPShU)
+    // but if I mirror in the paths in the Realtime Database I will essentially create a list of files in a given folder that I can query.
+    //https://github.com/firebase/quickstart-ios/issues/90
+    private final DatabaseReference usersPhotosDBRef = FirebaseDatabase.getInstance().getReference("users_photos_2");
 
-    private StorageReference sref;
     private ProgressDialog progess;
 
     private static final int CAMERA_REQUEST_CODE = 1 ;
@@ -52,19 +64,11 @@ public class PhotoDisplayActivity extends AppCompatActivity {
             //path = Uri.parse(savedInstanceState.getString("media_url"));
         //}
         setContentView(R.layout.activity_photo_display);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.photoToolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        sref = FirebaseStorage.getInstance().getReference();
+//        usersPhotosStorageRef = FirebaseStorage.getInstance().getReference();
         progess = new ProgressDialog(this);
         imgv = (ImageView) findViewById(R.id.imageView);
         pic =  (Button) findViewById(R.id.capture);
@@ -77,7 +81,6 @@ public class PhotoDisplayActivity extends AppCompatActivity {
 
            }
        });
-
 
     }
 
@@ -105,7 +108,9 @@ public class PhotoDisplayActivity extends AppCompatActivity {
 
                 File t = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), picName);
                 Uri uriPath = Uri.fromFile(t);
-                StorageReference storePic = sref.child("Photo").child(uriPath.getLastPathSegment());
+//                StorageReference storePic = usersPhotosStorageRef.child("Photo").child(uriPath.getLastPathSegment());
+                final String uuid = UUID.randomUUID().toString();
+                StorageReference storePic = usersPhotosStorageRef.child(LoginActivity.getUSER().getEmail().replace(".","")).child(uuid);
                 storePic.putFile(uriPath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -115,9 +120,10 @@ public class PhotoDisplayActivity extends AppCompatActivity {
 
                         Uri getImage = taskSnapshot.getDownloadUrl();
                         Picasso.with(PhotoDisplayActivity.this).load(getImage).resize(750,750).into(imgv);
-                        Toast.makeText(PhotoDisplayActivity.this,"Getting image..",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(PhotoDisplayActivity.this,"Getting image..",Toast.LENGTH_SHORT).show();
 
-
+                        // write path to realtime db
+                        usersPhotosDBRef.child(LoginActivity.getUSER().getEmail().replace(".","")).child(uuid).setValue(getImage.toString());
                     }
 
                 }).addOnFailureListener(new OnFailureListener() {
@@ -137,5 +143,34 @@ public class PhotoDisplayActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.photo_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_profile_2:
+                // direct them to profile
+                startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                return true;
+
+            case R.id.action_provider_search_2:
+                // direct them to provider search
+                startActivity( new Intent(getApplicationContext(), ProviderSearchActivity.class));
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 }

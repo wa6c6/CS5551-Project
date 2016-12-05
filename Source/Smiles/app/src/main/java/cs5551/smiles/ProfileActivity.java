@@ -23,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 public class ProfileActivity extends AppCompatActivity {
 
     // database connection
-    private final DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users_2");
+    private final DatabaseReference usersDBRef = FirebaseDatabase.getInstance().getReference("users_2");
 
     private User user = null;
 
@@ -35,6 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
     private RadioButton male, female;
     private RadioGroup gender;
 
+    private boolean newUser = false;
 
     private Button submitBtn;
 
@@ -82,14 +83,17 @@ public class ProfileActivity extends AppCompatActivity {
         submitBtn = (Button) findViewById(R.id.submitBtn);
 
         // Should execute once and pull back all users
-        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        usersDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // no user so must be registering
                 if(LoginActivity.getUSER() == null){
                     System.out.println("No USER so initial registration.");
+                    newUser = true;
                     return;
                 }
+                newUser = false;
+
                 // else user exists so populate form
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     if(child.getKey().equals(LoginActivity.getUSER().getEmail().replace(".",""))) {
@@ -186,7 +190,12 @@ public class ProfileActivity extends AppCompatActivity {
                 user.setInvisalign(invisalign.isChecked());
 
                 // update/save to db
-                usersRef.child(user.getEmail().replace(".","")).setValue(user);
+                usersDBRef.child(user.getEmail().replace(".","")).setValue(user);
+
+                // Its a new user so set on login, becaue its used other places.
+                if(newUser) {
+                    LoginActivity.setUSER(user);
+                }
 
                 Toast.makeText(ProfileActivity.this,"Profile Saved.",Toast.LENGTH_SHORT).show();
             }

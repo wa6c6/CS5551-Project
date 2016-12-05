@@ -31,7 +31,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import cs5551.smiles.places.GooglePlacesReadTask;
 
@@ -44,7 +47,9 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
     private GoogleMap mMap;
     public Geocoder geocoder;
 
-    private final DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users_2");
+    private final DatabaseReference usersDBRef = FirebaseDatabase.getInstance().getReference("users_2");
+    private final DatabaseReference usersPhotosDBRef = FirebaseDatabase.getInstance().getReference("users_photos_2");
+//    private final StorageReference usersPhotosStorageRef = FirebaseStorage.getInstance().getReference("users_photos_2");
 
     // in meters
     private int radius = 8100;        // approx meters in 5 miles
@@ -200,17 +205,41 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
                             public void onClick(DialogInterface dialog,int id) {
                                 System.out.println("Clicked on 'Yes'");
 
-                                usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                usersDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         // find user
                                         for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                            User user;
+//                                            User user;
                                             // match on key (ex. foo@examplecom)
                                             if(child.getKey().equals(LoginActivity.getUSER().getEmail().replace(".","")) ) {
-                                                user = child.getValue(User.class);
-                                                // send email
-                                                sendEmail(user.toString());
+                                                final User user = child.getValue(User.class);
+
+                                                // 1. Get paths to image files.
+                                                usersPhotosDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                        ArrayList<String> imagePaths = new ArrayList<String>();
+                                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                                            // match on key (ex. foo@examplecom)
+                                                            if(child.getKey().equals(LoginActivity.getUSER().getEmail().replace(".","")) ) {
+                                                                for(DataSnapshot child2 : child.getChildren()) {
+                                                                    // get all values
+                                                                imagePaths.add(child2.getValue().toString());
+                                                                }
+                                                            }
+                                                        }
+                                                        // 3. send email
+                                                        sendEmail(user.toString(), imagePaths);
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                    }
+                                                });
+//                                                // 3. send email
+//                                                sendEmail(user.toString());
                                                 break;
                                             }
                                         }
@@ -239,9 +268,17 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
-    private void sendEmail(String message) {
+    private void sendEmail(String message, List<String> imagePaths) {
+        int i =0;
+        StringBuilder sb = new StringBuilder(message);
+        sb.append(System.lineSeparator()).append("Image Links -----------------------").append(System.lineSeparator());
+        for(String path: imagePaths){
+            i++;
+//            sb.append("<a href='").append(path).append("'>").append("image-").append(i).append("</a>").append(System.lineSeparator());
+            sb.append(path).append(System.lineSeparator());
+        }
 //        Log.i("Send email", "");
-        String[] TO = {"wayne.aulner@cerner.com"};
+        String[] TO = {"waulner@gmail.com"};
         String[] CC = {""};
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
 //        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
@@ -249,11 +286,11 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
         emailIntent.setData(Uri.parse("mailto:"));
         // This to prompts email client only
         emailIntent.setType("message/rfc822");
-//        emailIntent.setType("text/plain");
+//        emailIntent.setType("text/html");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
 //        emailIntent.putExtra(Intent.EXTRA_CC, CC);
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Orthodontic Template From - " + LoginActivity.getUSER().getFirstName() + " " + LoginActivity.getUSER().getLastName() );
-        emailIntent.putExtra(Intent.EXTRA_TEXT, message);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
 
         try {
             startActivity(Intent.createChooser(emailIntent, "Choose an Email Client:"));

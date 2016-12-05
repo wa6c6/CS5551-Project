@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_profile"
+    <item android:id="@+id/action_profile_2"
         android:title="Profile"
         app:showAsAction="never"/>
 
-    <item android:id="@+id/set_radius"
-        android:title="Radius (mi)"
+    <item android:id="@+id/action_provider_search_2"
+        android:title="Provider Search"
         app:showAsAction="never"/>
 
 </menu>

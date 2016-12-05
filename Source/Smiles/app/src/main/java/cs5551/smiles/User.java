@@ -273,9 +273,9 @@ public class User {
           .append(System.lineSeparator())
           // complaints
           .append("Primary Complaints ----------------").append(System.lineSeparator())
-          .append("What you would like to change about your smile. ").append(changeSmile).append(System.lineSeparator())
-          .append("What you would like to change about your teeth. ").append(changeTeeth).append(System.lineSeparator())
-          .append("What you would like to change about your profile. ").append(changeProfile).append(System.lineSeparator())
+          .append("What about your smile would you change? ").append(changeSmile).append(System.lineSeparator())
+          .append("What about your teeth would you change? ").append(changeTeeth).append(System.lineSeparator())
+          .append("What about your profile would you change? ").append(changeProfile).append(System.lineSeparator())
           .append(System.lineSeparator())
           // treatment
           .append("Desired Treatment -----------------").append(System.lineSeparator())
