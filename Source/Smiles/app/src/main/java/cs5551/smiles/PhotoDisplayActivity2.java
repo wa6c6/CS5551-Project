@@ -1,10 +1,10 @@
 package cs5551.smiles;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,16 +37,15 @@ import java.util.UUID;
 
 import static android.view.View.VISIBLE;
 
-public class PhotoDisplayActivity extends AppCompatActivity {
+public class PhotoDisplayActivity2 extends AppCompatActivity {
 
     private ImageView imgv;
-//    private Button pic;
+    //    private Button pic;
     private ImageView pic;
     private ImageView silovite;
-    private Button next;
+    private  Button next, previous;
     private Bitmap bitmap;
-    private static Bitmap bmp[] = {null,null,null,null,null,null};
-    Uri getImage;
+    private static Bitmap bmp[] = new Bitmap[100];
 
     // File Storage
     private final StorageReference usersPhotosStorageRef = FirebaseStorage.getInstance().getReference("users_photos_2");
@@ -71,9 +70,9 @@ public class PhotoDisplayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //if (savedInstanceState != null) {
-            //path = Uri.parse(savedInstanceState.getString("media_url"));
+        //path = Uri.parse(savedInstanceState.getString("media_url"));
         //}
-        setContentView(R.layout.activity_photo_display);
+        setContentView(R.layout.activity_photo_display2);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.photoToolbar);
         setSupportActionBar(toolbar);
@@ -81,18 +80,18 @@ public class PhotoDisplayActivity extends AppCompatActivity {
 //        usersPhotosStorageRef = FirebaseStorage.getInstance().getReference();
         progess = new ProgressDialog(this);
         next = (Button) findViewById(R.id.next);
+        previous = (Button) findViewById(R.id.previous);
         imgv = (ImageView) findViewById(R.id.imageView);
         silovite = (ImageView) findViewById(R.id.imageView2);
-                   if(imgv.getVisibility()!=VISIBLE){
-                       imgv.setVisibility(View.VISIBLE);
-                     Bitmap bitmap=  PhotoDisplayActivity.getArrayBmps()[0];
-                       //imgv.setMaxWidth(1000);
-                       //imgv.setMaxWidth(1000);
-                       imgv.setImageBitmap(bitmap);
-                   }
-
 //        pic =  (Button) findViewById(R.id.capture);
-
+        if(imgv.getVisibility()!=VISIBLE){
+            imgv.setVisibility(View.VISIBLE);
+            Bitmap bitmap=  PhotoDisplayActivity2.getArrayBmps()[0];
+            //imgv.setMaxWidth(1000);
+            //imgv.setMaxWidth(1000);
+            imgv.setImageBitmap(bitmap);
+        }
+//
 //        pic.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -100,7 +99,7 @@ public class PhotoDisplayActivity extends AppCompatActivity {
 //                startActivityForResult(nav, CAMERA_REQUEST_CODE);
 //            }
 //        });
-        silovite.setImageDrawable(getResources().getDrawable(R.drawable.pic1));
+        silovite.setImageDrawable(getResources().getDrawable(R.drawable.pic2));
         pic = (ImageView) findViewById(R.id.photoView);
         pic.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -109,64 +108,95 @@ public class PhotoDisplayActivity extends AppCompatActivity {
                 startActivityForResult(nav, CAMERA_REQUEST_CODE);
             }
         });
+
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent next = new Intent(PhotoDisplayActivity.this,PhotoDisplayActivity2.class);
+                Intent next = new Intent(PhotoDisplayActivity2.this,PhotoDisplayActivity3.class);
                 startActivity(next);
                 finish();
-                //Picasso.with(PhotoDisplayActivity.this).load(getImage).resize(500,500).into(imgv);
-               // PhotoDisplayActivity2 pa2 = new PhotoDisplayActivity2();
-                bitmap = PhotoDisplayActivity2.getArrayBmps()[0];
+                Bitmap bitmap = PhotoDisplayActivity3.getArrayBmps()[0];
+                //imgv.setVisibility(View.VISIBLE);
                 imgv.setMaxHeight(500);
                 imgv.setMaxWidth(500);
                 imgv.setImageBitmap(bitmap);
-
-                //imgv.setVisibility(View.VISIBLE);
+                imgv.setVisibility(View.VISIBLE);
                 //onResume();
-
                 //startActivity(next);
+            }
+        });
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent previous = new Intent(PhotoDisplayActivity2.this,PhotoDisplayActivity.class);
+                startActivity(previous);
+                finish();
+                //PhotoDisplayActivity pa = new PhotoDisplayActivity();
+                Bitmap bitmap = PhotoDisplayActivity.getArrayBmps()[0];
+               // imgv.setVisibility(View.VISIBLE);
+                imgv.setMaxHeight(500);
+                imgv.setMaxWidth(500);
+                imgv.setImageBitmap(bitmap);
+                imgv.setVisibility(View.VISIBLE);
+                //onResume();
+                //startActivity(previous);
             }
         });
 
     }
- //   protected void onResume(){
+//    protected void onResume(){
 //        super.onResume();
 //        next.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                Intent next = new Intent(PhotoDisplayActivity.this,PhotoDisplayActivity2.class);
+//                Intent next = new Intent(PhotoDisplayActivity2.this,PhotoDisplayActivity3.class);
 //                startActivity(next);
 //                finish();
-//                //Picasso.with(PhotoDisplayActivity.this).load(getImage).resize(500,500).into(imgv);
-//                //PhotoDisplayActivity2 pa2 = new PhotoDisplayActivity2();
-//                bitmap = PhotoDisplayActivity2.getArrayBmps()[0];
+//                Bitmap bitmap = PhotoDisplayActivity3.getArrayBmps()[0];
+//                //imgv.setVisibility(View.VISIBLE);
 //                imgv.setMaxHeight(500);
 //                imgv.setMaxWidth(500);
 //                imgv.setImageBitmap(bitmap);
-//                imgv.setVisibility(VISIBLE);
+//                //imgv.setVisibility(View.VISIBLE);
 //                //onResume();
-//
 //                //startActivity(next);
 //            }
 //        });
-//
+//        previous.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent previous = new Intent(PhotoDisplayActivity2.this,PhotoDisplayActivity.class);
+//                startActivity(previous);
+//                finish();
+//                //PhotoDisplayActivity pa = new PhotoDisplayActivity();
+//                Bitmap bitmap = PhotoDisplayActivity.getArrayBmps()[0];
+//                // imgv.setVisibility(View.VISIBLE);
+//                imgv.setMaxHeight(500);
+//                imgv.setMaxWidth(500);
+//                imgv.setImageBitmap(bitmap);
+//                //imgv.setVisibility(View.VISIBLE);
+//                //onResume();
+//                //startActivity(previous);
+//            }
+//        });
 //    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-       if(requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK){
-       // if(true){
+        if(requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK){
+            // if(true){
             progess.setMessage("Pic Uploading ........");
             progess.show();
 
             Bitmap photo = (Bitmap) data.getExtras().get("data");
-            bmp[0] = photo;
+                bmp[0] = photo;
+
 
             try {
-                 Integer name = photo.getGenerationId();
+                Integer name = photo.getGenerationId();
                 String picName = name.toString();
                 FileOutputStream fos = new FileOutputStream(
                         new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),picName));
@@ -186,17 +216,17 @@ public class PhotoDisplayActivity extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         progess.dismiss();
 
-                         getImage = taskSnapshot.getDownloadUrl();
-                        Picasso.with(PhotoDisplayActivity.this).load(getImage).resize(500,500).into(imgv);
+                        Uri getImage = taskSnapshot.getDownloadUrl();
+                        Picasso.with(PhotoDisplayActivity2.this).load(getImage).resize(500,500).into(imgv);
 //                        Toast.makeText(PhotoDisplayActivity.this,"Getting image..",Toast.LENGTH_SHORT).show();
 
                         // Set to visible
-                        imgv.setVisibility(VISIBLE);
+                        imgv.setVisibility(View.VISIBLE);
 
                         // write path to realtime db
                         usersPhotosDBRef.child(LoginActivity.getUSER().getEmail().replace(".","")).child(uuid).setValue(getImage.toString());
 
-                        Toast.makeText(PhotoDisplayActivity.this,"Uploaded successfully",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PhotoDisplayActivity2.this,"Uploaded successfully",Toast.LENGTH_SHORT).show();
                     }
 
                 }).addOnFailureListener(new OnFailureListener() {
@@ -204,7 +234,7 @@ public class PhotoDisplayActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
 
                         progess.dismiss();
-                        Toast.makeText(PhotoDisplayActivity.this,"Uploaded failed",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PhotoDisplayActivity2.this,"Uploaded failed",Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -213,7 +243,6 @@ public class PhotoDisplayActivity extends AppCompatActivity {
             catch (Exception e){
                 e.printStackTrace();
             }
-
 
         }
 
@@ -245,12 +274,9 @@ public class PhotoDisplayActivity extends AppCompatActivity {
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
 
-
         }
-
     }
     public static Bitmap[] getArrayBmps(){
         return bmp;
     }
-
 }

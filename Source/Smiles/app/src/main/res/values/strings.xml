@@ -26,5 +26,10 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_minimal_register">MinimalRegisterActivity</string>
     <string name="title_activity_data_display">DataDisplayActivity</string>
+    <string name="title_activity_photo_diasplay2">PhotoDiasplayActivity2</string>
+    <string name="title_activity_photo_display3">PhotoDisplayActivity3</string>
+    <string name="title_activity_photo_display4">PhotoDisplayActivity4</string>
+    <string name="title_activity_photo_display5">PhotoDisplayActivity5</string>
+    <string name="title_activity_photo_display6">PhotoDisplayActivity6</string>
 
 </resources>

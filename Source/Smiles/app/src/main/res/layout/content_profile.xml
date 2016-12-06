@@ -51,7 +51,7 @@
 
                     <EditText
                         android:id="@+id/email_input"
-                        android:hint="email"
+                        android:hint="email (required)"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/login_group"
@@ -65,7 +65,7 @@
 
                     <EditText
                         android:id="@+id/password_input"
-                        android:hint="password"
+                        android:hint="password (required)"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/login_group"
@@ -97,7 +97,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="first name"
+                    android:hint="first name (required)"
                     android:layout_below="@id/user_group"
                     android:inputType="text"
                     android:id="@+id/first_name"
@@ -105,7 +105,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="last name"
+                    android:hint="last name (required)"
                     android:layout_below="@id/user_group"
                     android:inputType="text"
                     android:id="@+id/last_name"

@@ -230,6 +230,7 @@ public class ProfileActivity extends AppCompatActivity {
                         LoginActivity.setUSER(user);
                         startActivity(new Intent(getApplicationContext(), PhotoDisplayActivity.class));
                     } else {
+
                         Toast.makeText(ProfileActivity.this, "Profile Saved.", Toast.LENGTH_SHORT).show();
                     }
                 }
