@@ -117,8 +117,8 @@ public class PhotoDisplayActivity2 extends AppCompatActivity {
                 finish();
                 Bitmap bitmap = PhotoDisplayActivity3.getArrayBmps()[0];
                 //imgv.setVisibility(View.VISIBLE);
-                imgv.setMaxHeight(500);
-                imgv.setMaxWidth(500);
+               // imgv.setMaxHeight(500);
+               // imgv.setMaxWidth(500);
                 imgv.setImageBitmap(bitmap);
                 imgv.setVisibility(View.VISIBLE);
                 //onResume();
@@ -134,8 +134,8 @@ public class PhotoDisplayActivity2 extends AppCompatActivity {
                 //PhotoDisplayActivity pa = new PhotoDisplayActivity();
                 Bitmap bitmap = PhotoDisplayActivity.getArrayBmps()[0];
                // imgv.setVisibility(View.VISIBLE);
-                imgv.setMaxHeight(500);
-                imgv.setMaxWidth(500);
+               // imgv.setMaxHeight(500);
+               // imgv.setMaxWidth(500);
                 imgv.setImageBitmap(bitmap);
                 imgv.setVisibility(View.VISIBLE);
                 //onResume();

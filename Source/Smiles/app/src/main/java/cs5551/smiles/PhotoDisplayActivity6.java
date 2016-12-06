@@ -116,8 +116,8 @@ public class PhotoDisplayActivity6 extends AppCompatActivity {
                 finish();
                 Bitmap bitmap = PhotoDisplayActivity5.getArrayBmps()[0];
                 //imgv.setVisibility(View.VISIBLE);
-                imgv.setMaxHeight(500);
-                imgv.setMaxWidth(500);
+                //imgv.setMaxHeight(500);
+                //imgv.setMaxWidth(500);
                 //imgv.setImageURI(getImage);
                 imgv.setImageBitmap(bitmap);
                 imgv.setVisibility(View.VISIBLE);

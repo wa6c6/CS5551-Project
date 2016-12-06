@@ -118,8 +118,8 @@ public class PhotoDisplayActivity extends AppCompatActivity {
                 //Picasso.with(PhotoDisplayActivity.this).load(getImage).resize(500,500).into(imgv);
                // PhotoDisplayActivity2 pa2 = new PhotoDisplayActivity2();
                 bitmap = PhotoDisplayActivity2.getArrayBmps()[0];
-                imgv.setMaxHeight(500);
-                imgv.setMaxWidth(500);
+                //imgv.setMaxHeight(500);
+               // imgv.setMaxWidth(500);
                 imgv.setImageBitmap(bitmap);
 
                 //imgv.setVisibility(View.VISIBLE);
