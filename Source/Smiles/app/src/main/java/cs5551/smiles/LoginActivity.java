@@ -429,8 +429,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 finish();
-                //startActivity(new Intent(getApplicationContext(), ProviderSearchActivity.class));
-                startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                startActivity(new Intent(getApplicationContext(), ProviderSearchActivity.class));
+//                startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
             } else {
                 mPasswordView.setError("This email/password is incorrect.");
                 mPasswordView.requestFocus();

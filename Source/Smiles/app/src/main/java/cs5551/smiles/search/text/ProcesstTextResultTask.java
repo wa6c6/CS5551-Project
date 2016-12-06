@@ -1,16 +1,13 @@
-package cs5551.smiles.places;
+package cs5551.smiles.search.text;
 
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.util.Log;
 
-import com.google.maps.android.SphericalUtil;
-
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONObject;
 
@@ -18,17 +15,16 @@ import java.util.HashMap;
 import java.util.List;
 
 import cs5551.smiles.R;
-import cs5551.smiles.places.Places;
 
 
-public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<String, String>>> {
-    JSONObject googlePlacesJson;
+public class ProcesstTextResultTask extends AsyncTask<Object, Integer, List<HashMap<String, String>>> {
+    JSONObject googleTextSearchJson;
     GoogleMap googleMap;
 
     final LatLng currLoc;
     final int radius;
 
-    public PlacesDisplayTask(LatLng currLoc, int radius){
+    public ProcesstTextResultTask(LatLng currLoc, int radius){
         this.currLoc = currLoc;
         this.radius = radius;
     }
@@ -37,12 +33,12 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
     protected List<HashMap<String, String>> doInBackground(Object... inputObj) {
 
         List<HashMap<String, String>> googlePlacesList = null;
-        Places placeJsonParser = new Places();
+        TextResult textResultParser = new TextResult();
 
         try {
             googleMap = (GoogleMap) inputObj[0];
-            googlePlacesJson = new JSONObject((String) inputObj[1]);
-            googlePlacesList = placeJsonParser.parse(googlePlacesJson);
+            googleTextSearchJson = new JSONObject((String) inputObj[1]);
+            googlePlacesList = textResultParser.parse(googleTextSearchJson);
         } catch (Exception e) {
             Log.d("Exception", e.toString());
         }
