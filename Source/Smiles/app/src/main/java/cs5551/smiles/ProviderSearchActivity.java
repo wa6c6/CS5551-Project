@@ -10,10 +10,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -31,12 +33,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import cs5551.smiles.places.GooglePlacesReadTask;
+import cs5551.smiles.search.places.GooglePlacesSearch;
+import cs5551.smiles.search.text.GoogleTextSearchTask;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -46,6 +49,7 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
 
     private GoogleMap mMap;
     public Geocoder geocoder;
+    public final static String google_map_key = "AIzaSyDjBnQC0MIH4GwMvZ9fhqtVr0NZgy2t84o";
 
     private final DatabaseReference usersDBRef = FirebaseDatabase.getInstance().getReference("users_2");
     private final DatabaseReference usersPhotosDBRef = FirebaseDatabase.getInstance().getReference("users_photos_2");
@@ -55,6 +59,8 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
     private int radius = 8100;        // approx meters in 5 miles
     private int metersInMile = 1609; // approx meters in 1 mile
     private String[] radiiArray;
+
+    private LatLng currentLocationCorodinates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,34 +120,38 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
 
         // Shouldn't need this, because we could never have gottento this activity
         // unless we had permission (unless the user said to the prompt possibly?)
-        if (checkSelfPermission(ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED &&
-                checkSelfPermission(ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(ACCESS_FINE_LOCATION)   != PackageManager.PERMISSION_GRANTED &&
+                checkSelfPermission(ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //show message or ask permissions from the user.
             return;
         }
 
-        LatLng userCurrentLocationCorodinates = null;
-        double latitude = 0, longitude = 0;
+//        LatLng currentLocationCorodinates = null;
+//        double latitude = 0, longitude = 0;
 
         //Getting the current location of the user.
         userCurrentLocation.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                 0, 0, userCurrentLocationListener);
-        latitude = userCurrentLocation
+//        latitude = userCurrentLocation
+//                .getLastKnownLocation(LocationManager.GPS_PROVIDER)
+//                .getLatitude();
+//        longitude = userCurrentLocation
+//                .getLastKnownLocation(LocationManager.GPS_PROVIDER)
+//                .getLongitude();
+        currentLocationCorodinates = new LatLng(userCurrentLocation
                 .getLastKnownLocation(LocationManager.GPS_PROVIDER)
-                .getLatitude();
-        longitude = userCurrentLocation
-                .getLastKnownLocation(LocationManager.GPS_PROVIDER)
-                .getLongitude();
-        userCurrentLocationCorodinates = new LatLng(latitude,longitude);
+                .getLatitude(),
+                userCurrentLocation
+                        .getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                        .getLongitude());
 
         // used in the map marker
         StringBuilder userAddress = new StringBuilder();
 
         // Set current
         try {
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+//            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            List<Address> addresses = geocoder.getFromLocation(currentLocationCorodinates.latitude, currentLocationCorodinates.longitude, 1);
             Address address = addresses.get(0);
             userAddress =  new StringBuilder();
             for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
@@ -156,37 +166,27 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
         }
 
         // Add Map Marker
-        mMap.addMarker(new MarkerOptions().position(userCurrentLocationCorodinates)
+        mMap.addMarker(new MarkerOptions().position(currentLocationCorodinates)
                 .title("Your current address.").snippet(userAddress.toString()));
 
         // Move camera and zoom level of the map.
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocationCorodinates, 15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocationCorodinates, 15));
 
-        // WAYNE
+        // 1. Text Search
         String type = "Orthodontics";
-        // Google Places Search
-//        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-//        googlePlacesUrl.append("location=" + latitude + "," + longitude);
-//        googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
-//        googlePlacesUrl.append("&radius=" + 5000);
-//        googlePlacesUrl.append("&types=" + type);
-//        googlePlacesUrl.append("&sensor=true");
-//        googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
-//        googlePlacesUrl.append("&key=" + "AIzaSyCGeqWbwxzG6zHv2Nxgg3w4RJKisDepayo");
-
-        // Google Text Search
         StringBuilder googleTextSearchUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?");
         googleTextSearchUrl.append("query=" + type);
-        googleTextSearchUrl.append("&location=" + latitude + "," + longitude);
+        googleTextSearchUrl.append("&location=" + currentLocationCorodinates.latitude + "," + currentLocationCorodinates.longitude);
         System.out.println("radius = " + radius);
         googleTextSearchUrl.append("&radius=" + radius);
-        googleTextSearchUrl.append("&key=" + "AIzaSyCGeqWbwxzG6zHv2Nxgg3w4RJKisDepayo");
+        googleTextSearchUrl.append("&key=" + ProviderSearchActivity.google_map_key);
 
-        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask(userCurrentLocationCorodinates, radius);
-        Object[] toPass = new Object[2];
-        toPass[0] = mMap;
-        toPass[1] = googleTextSearchUrl.toString();
-        googlePlacesReadTask.execute(toPass);
+
+        GoogleTextSearchTask googleTextSearch = new GoogleTextSearchTask(currentLocationCorodinates, radius);
+        Object[] args = new Object[2];
+        args[0] = mMap;
+        args[1] = googleTextSearchUrl.toString();
+        googleTextSearch.execute(args);
 
         //
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener(){
@@ -196,124 +196,137 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
                 // ? - i think this allows the pin tag to still show up after touching
                 marker.showInfoWindow();
 
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ProviderSearchActivity.this);
-                dialogBuilder.setTitle("Email " + marker.getTitle() + "?")
-                        // need to call some other google services to get ratings info, email, and even pics of clinic.
-                        .setMessage("** Additional Provider Info **")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,int id) {
-                                System.out.println("Clicked on 'Yes'");
+                GooglePlacesSearch googlePlacesSearch = new GooglePlacesSearch(currentLocationCorodinates,
+                        radius,
+                        marker.getTitle(),
+                        usersDBRef,
+                        usersPhotosDBRef,
+                        ProviderSearchActivity.this,
+                        marker.getPosition());
+//                String clinicInfo = googlePlacesSearch.search(currentLocationCorodinates, radius, marker.getTitle());
+                googlePlacesSearch.execute();
 
-                                usersDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        // find user
-                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-//                                            User user;
-                                            // match on key (ex. foo@examplecom)
-                                            if(child.getKey().equals(LoginActivity.getUSER().getEmail().replace(".","")) ) {
-                                                final User user = child.getValue(User.class);
-
-                                                // 1. Get paths to image files.
-                                                usersPhotosDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                                        ArrayList<String> imagePaths = new ArrayList<String>();
-                                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                                            // match on key (ex. foo@examplecom)
-                                                            if(child.getKey().equals(LoginActivity.getUSER().getEmail().replace(".","")) ) {
-                                                                for(DataSnapshot child2 : child.getChildren()) {
-                                                                    // 2. get all image paths
-                                                                    imagePaths.add(child2.getValue().toString());
-                                                                }
-                                                            }
-                                                        }
-                                                        // 3. send email
-                                                        sendEmail(user.toString(), imagePaths);
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(DatabaseError databaseError) {
-
-                                                    }
-                                                });
-//                                                // 3. send email
-//                                                sendEmail(user.toString());
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                        System.out.println("In onCancelled");
-                                    }
-                                });
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,int id) {
-                                System.out.println("Clicked on 'No'");
-                            }
-                        });
-
-                // Create dialogue
-                AlertDialog alertDialog = dialogBuilder.create();
-                alertDialog.show();
+//                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ProviderSearchActivity.this);
+//                dialogBuilder.setTitle("Email " + marker.getTitle() + "?")
+//                        // need to call some other google services to get ratings info, email, and even pics of clinic.
+//                        .setMessage("** Additional Provider Info **")
+////                        .setMessage(clinicInfo)
+//                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog,int id) {
+//                                System.out.println("Clicked on 'Yes'");
+//
+//                                usersDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                    @Override
+//                                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                                        // find user
+//                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+////                                            User user;
+//                                            // match on key (ex. foo@examplecom)
+//                                            if(child.getKey().equals(LoginActivity.getUSER().getEmail().replace(".","")) ) {
+//                                                final User user = child.getValue(User.class);
+//
+//                                                // 1. Get paths to image files.
+//                                                usersPhotosDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                    @Override
+//                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                                                        ArrayList<String> imagePaths = new ArrayList<String>();
+//                                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+//                                                            // match on key (ex. foo@examplecom)
+//                                                            if(child.getKey().equals(LoginActivity.getUSER().getEmail().replace(".","")) ) {
+//                                                                for(DataSnapshot child2 : child.getChildren()) {
+//                                                                    // 2. get all image paths
+//                                                                    imagePaths.add(child2.getValue().toString());
+//                                                                }
+//                                                            }
+//                                                        }
+//
+//                                                        // 3. send email
+//                                                        sendEmail(user.toString(), imagePaths);
+//                                                    }
+//
+//                                                    @Override
+//                                                    public void onCancelled(DatabaseError databaseError) {
+//
+//                                                    }
+//                                                });
+////                                                // 3. send email
+////                                                sendEmail(user.toString());
+//                                                break;
+//                                            }
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(DatabaseError databaseError) {
+//                                        System.out.println("In onCancelled");
+//                                    }
+//                                });
+//                            }
+//                        })
+//                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog,int id) {
+//                                System.out.println("Clicked on 'No'");
+//                            }
+//                        });
+//
+//                // Create dialogue
+//                AlertDialog alertDialog = dialogBuilder.create();
+//                alertDialog.show();
 
                 return true;
             }
         });
     }
 
-    private void sendEmail(String message, List<String> imagePaths) {
-        int i =0;
-        StringBuilder sb = new StringBuilder(message);
-        sb.append(System.lineSeparator()).append("Image Links -----------------------").append(System.lineSeparator());
-        for(String path: imagePaths){
-            i++;
-//            sb.append("<a href='").append(path).append("'>").append("image-").append(i).append("</a>").append(System.lineSeparator());
-            sb.append(path).append(System.lineSeparator());
-        }
-//        Log.i("Send email", "");
-//        String[] TO = {"waulner@gmail.com"};
-//        String[] CC = {""};
-        ArrayList<String> to = new ArrayList<>();
-
-        // load with "to" addresses.
-        if(LoginActivity.getUSER().getEmail().contains("@example.com")) {
-            to.add("waulner@gmail.com");
-        }
-        else {
-            to.add(LoginActivity.getUSER().getEmail());
-        }
-
-        // Will need to convert "to" ArryaList to array
-        String [] arr = new String[to.size()];
-
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-//        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-
-        emailIntent.setData(Uri.parse("mailto:"));
-        // This to prompts email client only
-        emailIntent.setType("message/rfc822");
-//        emailIntent.setType("text/html");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, to.toArray(arr));
-//        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-//        emailIntent.putExtra(Intent.EXTRA_CC, CC);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Orthodontic Template From - " + LoginActivity.getUSER().getFirstName() + " " + LoginActivity.getUSER().getLastName() );
-        emailIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
-
-        try {
-            startActivity(Intent.createChooser(emailIntent, "Choose an Email Client:"));
-//            finish();     // seems to exit the app?
-//            Log.i("Finished sending email...", "");
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(ProviderSearchActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    private void sendEmail(String message, List<String> imagePaths) {
+//        int i =0;
+//        StringBuilder sb = new StringBuilder(message);
+//        sb.append(System.lineSeparator()).append("Image Links -----------------------").append(System.lineSeparator());
+//        for(String path: imagePaths){
+//            i++;
+////            sb.append("<a href='").append(path).append("'>").append("image-").append(i).append("</a>").append(System.lineSeparator());
+//            sb.append(path).append(System.lineSeparator());
+//        }
+////        Log.i("Send email", "");
+////        String[] TO = {"waulner@gmail.com"};
+////        String[] CC = {""};
+//        ArrayList<String> to = new ArrayList<>();
+//
+//        // load with "to" addresses.
+//        if(LoginActivity.getUSER().getEmail().contains("@example.com")) {
+//            to.add("waulner@gmail.com");
+//        }
+//        else {
+//            // doesn't email clinic, a
+//            to.add(LoginActivity.getUSER().getEmail());
+//        }
+//
+//        // Will need to convert "to" ArryaList to array
+//        String [] arr = new String[to.size()];
+//
+//        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+////        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+//
+//        emailIntent.setData(Uri.parse("mailto:"));
+//        // This to prompts email client only
+//        emailIntent.setType("message/rfc822");
+////        emailIntent.setType("text/html");
+//        emailIntent.putExtra(Intent.EXTRA_EMAIL, to.toArray(arr));
+////        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+////        emailIntent.putExtra(Intent.EXTRA_CC, CC);
+//        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Orthodontic Template From - " + LoginActivity.getUSER().getFirstName() + " " + LoginActivity.getUSER().getLastName() );
+//        emailIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+//
+//        try {
+//            startActivity(Intent.createChooser(emailIntent, "Choose an Email Client:"));
+////            finish();     // seems to exit the app?
+////            Log.i("Finished sending email...", "");
+//        } catch (android.content.ActivityNotFoundException ex) {
+//            Toast.makeText(ProviderSearchActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -332,14 +345,14 @@ public class ProviderSearchActivity extends AppCompatActivity implements OnMapRe
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ProviderSearchActivity.this);
                 dialogBuilder.setTitle("Pick a Radius")
 
-                             .setItems(R.array.radii, new DialogInterface.OnClickListener() {
-                                 public void onClick(DialogInterface dialog, int which) {
-                                     // The 'which' argument contains the index position
-                                     // of the selected item
-                                     radius = new Integer(radiiArray[which]) * metersInMile;
-                                     onMapReady(mMap);
-                                 }
-                             });
+                        .setItems(R.array.radii, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                                radius = new Integer(radiiArray[which]) * metersInMile;
+                                onMapReady(mMap);
+                            }
+                        });
 //                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 //                                @Override
 //                                public void onClick(DialogInterface dialog,int id) {

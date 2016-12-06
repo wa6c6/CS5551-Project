@@ -1,4 +1,4 @@
-package cs5551.smiles.places;
+package cs5551.smiles.search;
 
 import android.util.Log;
 

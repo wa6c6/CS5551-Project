@@ -15,10 +15,14 @@
     Once you have your key (it starts with "AIza"), replace the "google_maps_key"
     string in this file.
     -->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
-        AIzaSyCGeqWbwxzG6zHv2Nxgg3w4RJKisDepayo
-    </string>
+    <!-- wayne -->
+    <!--<string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">-->
+        <!--AIzaSyCGeqWbwxzG6zHv2Nxgg3w4RJKisDepayo-->
+    <!--</string>-->
     <!--Old Value-->
     <!--AIzaSyArXhXTlepX0ElU44XE5pcozlsunGo1saA-->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyDjBnQC0MIH4GwMvZ9fhqtVr0NZgy2t84o
+    </string>
 
 </resources>

@@ -1,4 +1,4 @@
-package cs5551.smiles.places;
+package cs5551.smiles.search.text;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class Places {
+public class TextResult {
 
     public List<HashMap<String, String>> parse(JSONObject jsonObject) {
         JSONArray jsonArray = null;
@@ -38,7 +38,7 @@ public class Places {
         return placesList;
     }
 
-    private HashMap<String, String> getPlace(JSONObject googlePlaceJson) {
+    private HashMap<String, String> getPlace(JSONObject googleTextSearchJson) {
 //        HashMap<String, String> googlePlaceMap = new HashMap<String, String>();
 //        String placeName = "-NA-";
 //        String vicinity = "-NA-";
@@ -47,15 +47,15 @@ public class Places {
 //        String reference = "";
 //
 //        try {
-//            if (!googlePlaceJson.isNull("name")) {
-//                placeName = googlePlaceJson.getString("name");
+//            if (!googleTextSearchJson.isNull("name")) {
+//                placeName = googleTextSearchJson.getString("name");
 //            }
-//            if (!googlePlaceJson.isNull("vicinity")) {
-//                vicinity = googlePlaceJson.getString("vicinity");
+//            if (!googleTextSearchJson.isNull("vicinity")) {
+//                vicinity = googleTextSearchJson.getString("vicinity");
 //            }
-//            latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
-//            longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
-//            reference = googlePlaceJson.getString("reference");
+//            latitude = googleTextSearchJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
+//            longitude = googleTextSearchJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
+//            reference = googleTextSearchJson.getString("reference");
 //            googlePlaceMap.put("place_name", placeName);
 //            googlePlaceMap.put("vicinity", vicinity);
 //            googlePlaceMap.put("lat", latitude);
@@ -68,11 +68,11 @@ public class Places {
         HashMap<String, String> googlePlaceMap = new HashMap<String, String>();
 
         try {
-            googlePlaceMap.put("place_name", googlePlaceJson.getString("name"));
+            googlePlaceMap.put("place_name", googleTextSearchJson.getString("name"));
             googlePlaceMap.put("lat",
-                                googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat"));
+                                googleTextSearchJson.getJSONObject("geometry").getJSONObject("location").getString("lat"));
             googlePlaceMap.put("lng",
-                                googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng"));
+                                googleTextSearchJson.getJSONObject("geometry").getJSONObject("location").getString("lng"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
