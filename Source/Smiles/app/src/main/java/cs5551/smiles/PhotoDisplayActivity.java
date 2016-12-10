@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.gcm.Task;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -33,6 +35,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import static android.view.View.VISIBLE;
@@ -45,6 +48,7 @@ public class PhotoDisplayActivity extends AppCompatActivity {
     private ImageView silovite;
     private Button next;
     private Bitmap bitmap;
+    private Uri uriPath;
     private static Bitmap bmp[] = {null,null,null,null,null,null};
     Uri getImage;
 
@@ -90,6 +94,55 @@ public class PhotoDisplayActivity extends AppCompatActivity {
                        //imgv.setMaxWidth(1000);
                        imgv.setImageBitmap(bitmap);
                    }
+
+        usersPhotosDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> imagePaths = new ArrayList<String>();
+                StorageReference storageRef;
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+//                    // match on key (ex. foo@examplecom)
+                    if (child.getKey().equals(LoginActivity.getUSER().getEmail().replace(".", ""))) {
+                        for (DataSnapshot child2 : child.getChildren()) {
+//                            // 2. get all image paths
+//                            //imagePaths.add(child2.getValue().toString());
+          storageRef = usersPhotosStorageRef.child("users_photos_2/" + LoginActivity.getUSER().getEmail().replace(".", "")+"/");
+//
+//                           // if(checkImages!=null) {
+//
+//
+//
+//
+//
+//                        }
+//                    }
+//                }
+                            // 3. send
+                            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+
+                                    String image = uri.getLastPathSegment();
+                                    imgv.setImageURI(Uri.parse(image));
+                                    imgv.setVisibility(View.VISIBLE);
+
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+                          @Override
+                          public void onCancelled(DatabaseError databaseError) {
+                              Toast.makeText(PhotoDisplayActivity.this,"Can't locate your images",Toast.LENGTH_SHORT).show();
+                          }
+                      });
+
+
+
+
+
 
 //        pic =  (Button) findViewById(R.id.capture);
 
@@ -177,7 +230,7 @@ public class PhotoDisplayActivity extends AppCompatActivity {
                 //progess.dismiss();
 
                 File t = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), picName);
-                Uri uriPath = Uri.fromFile(t);
+                 uriPath = Uri.fromFile(t);
 //                StorageReference storePic = usersPhotosStorageRef.child("Photo").child(uriPath.getLastPathSegment());
                 final String uuid = UUID.randomUUID().toString();
                 StorageReference storePic = usersPhotosStorageRef.child(LoginActivity.getUSER().getEmail().replace(".","")).child(uuid);
